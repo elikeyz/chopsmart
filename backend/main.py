@@ -34,7 +34,7 @@ app.add_middleware(
 
 class RecipeRequest(BaseModel):
     ingredients: list[str] = Field(..., description="List of available ingredients")
-    calorieTarget: int = Field(..., ge=150, le=900, description="Target calorie intake for the recipe")
+    calorie_target: int = Field(..., ge=150, le=900, description="Target calorie intake for the recipe")
     dislikes: list[str] = Field(default_factory=list, description="List of ingredients to avoid")
     allergies: list[str] = Field(default_factory=list, description="List of ingredients causing allergies")
 

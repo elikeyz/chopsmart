@@ -22,7 +22,7 @@ async def run_planner_agent(request_body) -> Recipe:
   try:
     async with create_opennutrition_mcp_server() as opennutrition_server:
       ingredients = request_body.ingredients
-      calorieTarget = request_body.calorieTarget
+      calorie_target = request_body.calorie_target
       dislikes = request_body.dislikes
       allergies = request_body.allergies
 
@@ -31,7 +31,7 @@ async def run_planner_agent(request_body) -> Recipe:
 
       INPUT CONSTRAINTS:
       - Ingredients: {ingredients}
-      - Target calories: {calorieTarget} (acceptable ±10%)
+      - Target calories: {calorie_target} (acceptable ±10%)
       - Dislikes: {dislikes}
       - Allergies: {allergies} (STRICT)
       - Optional: cuisine, time, preferences

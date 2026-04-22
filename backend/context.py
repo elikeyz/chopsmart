@@ -31,7 +31,7 @@ Return structured JSON only:
     "name": string,
     "ingredients": [{ "name": string, "quantity": string, "unit": string }],
     "steps": string[],
-    "estimatedCalories": number
+    "estimated_calories": number
   }
 ]
 
@@ -253,7 +253,7 @@ Return ONLY:
       { "name": "string", "quantity": "string", "unit": "string" }
     ],
     "steps": ["string"],
-    "estimatedCalories": number
+    "estimated_calories": number
   },
   "changes_made": [
     {

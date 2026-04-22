@@ -9,7 +9,7 @@ class Recipe(BaseModel):
   name: str = Field(description="Name of the recipe")
   ingredients: list[Ingredient] = Field(description="List of ingredients with name, quantity, and unit")
   steps: list[str] = Field(description="Cooking steps")
-  estimatedCalories: float = Field(description="Estimated calorie count for the recipe")
+  estimated_calories: float = Field(description="Estimated calorie count for the recipe")
 
 class EvaluationFeedback(BaseModel):
   approved: bool = Field(description="Whether the recipe meets the constraints (true/false)")

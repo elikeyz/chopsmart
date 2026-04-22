@@ -3,7 +3,6 @@ import { Recipe } from "@/types";
 function RecipeDisplay({ recipe }: { recipe: Recipe }) {
   return (
     <div className="p-6 space-y-8">
-      {/* Recipe header */}
       <div className="pb-5 border-b border-border">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <h2 className="text-2xl font-bold text-foreground leading-tight">
@@ -19,7 +18,6 @@ function RecipeDisplay({ recipe }: { recipe: Recipe }) {
         </div>
       </div>
 
-      {/* Ingredients */}
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-wider text-(--muted) mb-3">
           Ingredients
@@ -28,13 +26,12 @@ function RecipeDisplay({ recipe }: { recipe: Recipe }) {
           {recipe.ingredients.map((ing, i) => (
             <li key={i} className="flex items-start gap-2.5 text-sm text-foreground">
               <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
-              {ing}
+              {`${ing.quantity} ${ing.unit} of ${ing.name}`}
             </li>
           ))}
         </ul>
       </section>
 
-      {/* Steps */}
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-wider text-(--muted) mb-3">
           Instructions
@@ -51,11 +48,10 @@ function RecipeDisplay({ recipe }: { recipe: Recipe }) {
         </ol>
       </section>
 
-      {/* Suggestions */}
       {recipe.suggestions.length > 0 && (
         <section className="pt-6 border-t border-border">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-(--muted) mb-4">
-            You might also like
+            A few things to note
           </h3>
           <ul className="space-y-2">
             {recipe.suggestions.map((s, i) => (
