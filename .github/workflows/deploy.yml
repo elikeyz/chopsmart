@@ -46,4 +46,7 @@ jobs:
 
       - name: Run deploy script
         working-directory: backend
+        env:
+          DEFAULT_AWS_REGION: ${{ secrets.DEFAULT_AWS_REGION }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: uv run deploy.py
