@@ -55,6 +55,15 @@ def main():
 
   try:
     os.chdir(terraform_dir)
+    run_command([
+      "terraform", "init", "-input=false",
+      "-backend-config", f"bucket=twin-terraform-state-{account_id}",
+      "-backend-config", f"key=terraform.tfstate",
+      "-backend-config", f"region={region}",
+      "-backend-config", "dynamodb_table=twin-terraform-locks",
+      "-backend-config", "encrypt=true",
+    ])
+
     ecr_url = run_command(
       ["terraform", "output", "-raw", "ecr_repository_url"], capture_output=True
     )
