@@ -187,6 +187,7 @@ def main():
                   "ImageConfiguration": {
                     "Port": "8000",
                     "RuntimeEnvironmentVariables": {
+                      "ENVIRONMENT": "production",
                       "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY", ""),
                       "DEFAULT_AWS_REGION": os.environ.get("DEFAULT_AWS_REGION", ""),
                       "BEDROCK_MODEL_ID": os.environ.get("BEDROCK_MODEL_ID", ""),

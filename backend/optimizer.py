@@ -10,15 +10,14 @@ from output_types import OptimizerOutput, Recipe
 
 logger = logging.getLogger()
 
-model_id = os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
-bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
-logger.info(f"DEBUG: BEDROCK_REGION from env = {bedrock_region}")
-os.environ["AWS_REGION_NAME"] = bedrock_region
-logger.info(f"DEBUG: Set AWS_REGION_NAME to {bedrock_region}")
-
-model = LitellmModel(model=f"bedrock/{model_id}")
-
 async def run_optimizer_agent(recipe, evaluation, constraints) -> OptimizerOutput:
+  model_id = os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
+  bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
+  os.environ["AWS_REGION_NAME"] = bedrock_region
+
+  model = LitellmModel(model=f"bedrock/{model_id}")
+
+  logger.info("Running optimizer agent with recipe: %s, evaluation: %s, and constraints: %s", recipe, evaluation, constraints)
   try:
     async with create_opennutrition_mcp_server() as opennutrition_server:
       optimizer_prompt = f"""
@@ -46,6 +45,7 @@ async def run_optimizer_agent(recipe, evaluation, constraints) -> OptimizerOutpu
 
       with trace("ChopSmart"):
         result = await Runner.run(agent, input=optimizer_prompt)
+        logger.info("Optimizer agent result: %s", result)
         return result.final_output
 
   except Exception as e:

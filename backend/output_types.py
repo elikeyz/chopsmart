@@ -15,7 +15,7 @@ class EvaluationFeedback(BaseModel):
   approved: bool = Field(description="Whether the recipe meets the constraints (true/false)")
   verdict: str = Field(description="Evaluation verdict, e.g., 'pass', 'fail', 'needs adjustment'")
   issues: list[str] = Field(description="List of specific issues identified in the recipes, e.g., 'calorie count too high', 'contains allergen: peanuts'")
-  suggestions: list[str] = Field(description="List of actionable suggestions for improving the recipes, e.g., 'reduce chicken quantity to 100g', 'substitute peanuts with sunflower seeds'")
+  suggestions: list[str] = Field(description="List of actionable suggestions for improving the recipes, e.g., 'reduce chicken quantity to 100g', 'substitute peanuts with sunflower seeds'. These should be user-friendly and not contain any technical jargon like food_id.")
   score: int = Field(description="Numerical score representing how well the recipes meet the constraints, e.g., 85")
 
 class OptimizerOutput(BaseModel):

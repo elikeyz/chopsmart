@@ -10,15 +10,14 @@ from output_types import Recipe
 
 logger = logging.getLogger()
 
-model_id = os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
-bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
-logger.info(f"DEBUG: BEDROCK_REGION from env = {bedrock_region}")
-os.environ["AWS_REGION_NAME"] = bedrock_region
-logger.info(f"DEBUG: Set AWS_REGION_NAME to {bedrock_region}")
-
-model = LitellmModel(model=f"bedrock/{model_id}")
-
 async def run_planner_agent(request_body) -> Recipe:
+  model_id = os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
+  bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
+  os.environ["AWS_REGION_NAME"] = bedrock_region
+
+  model = LitellmModel(model=f"bedrock/{model_id}")
+
+  logger.info("Running planner agent with request body: %s", request_body)
   try:
     async with create_opennutrition_mcp_server() as opennutrition_server:
       ingredients = request_body.ingredients
@@ -47,6 +46,7 @@ async def run_planner_agent(request_body) -> Recipe:
 
       with trace("ChopSmart"):
         result = await Runner.run(agent, input=planner_prompt)
+        logger.info("Planner agent result: %s", result)
         return result.final_output
 
   except Exception as e:

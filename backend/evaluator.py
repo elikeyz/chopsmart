@@ -10,15 +10,14 @@ from output_types import EvaluationFeedback
 
 logger = logging.getLogger()
 
-model_id = os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
-bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
-logger.info(f"DEBUG: BEDROCK_REGION from env = {bedrock_region}")
-os.environ["AWS_REGION_NAME"] = bedrock_region
-logger.info(f"DEBUG: Set AWS_REGION_NAME to {bedrock_region}")
-
-model = LitellmModel(model=f"bedrock/{model_id}")
-
 async def run_evaluator_agent(recipe, constraints) -> EvaluationFeedback:
+  model_id = os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
+  bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
+  os.environ["AWS_REGION_NAME"] = bedrock_region
+
+  model = LitellmModel(model=f"bedrock/{model_id}")
+
+  logger.info("Running evaluator agent with recipe: %s and constraints: %s", recipe, constraints)
   try:
     async with create_opennutrition_mcp_server() as opennutrition_server:
       evaluator_prompt = f"""
@@ -43,6 +42,7 @@ async def run_evaluator_agent(recipe, constraints) -> EvaluationFeedback:
 
       with trace("ChopSmart"):
         result = await Runner.run(agent, input=evaluator_prompt, max_turns=15)
+        logger.info("Evaluator agent result: %s", result)
         return result.final_output
 
   except Exception as e:
