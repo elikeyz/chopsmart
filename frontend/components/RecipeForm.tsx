@@ -90,9 +90,8 @@ function RecipeForm({ loading, setLoading, setRecipe }: RecipeFormProps) {
         <div className="relative">
           <input
             type="number"
-            min={100}
-            max={5000}
-            step={50}
+            min={150}
+            max={900}
             value={calorieTarget}
             onChange={(e) => setCalorieTarget(e.target.value)}
             placeholder="e.g. 600"
