@@ -58,9 +58,9 @@ def main():
     run_command([
       "terraform", "init", "-input=false",
       "-backend-config", f"bucket=twin-terraform-state-{account_id}",
-      "-backend-config", f"key=terraform.tfstate",
+      "-backend-config", f"key=dev/terraform.tfstate",
       "-backend-config", f"region={region}",
-      "-backend-config", "dynamodb_table=twin-terraform-locks",
+      "-backend-config", "dynamodb_table=chopsmart-terraform-locks",
       "-backend-config", "encrypt=true",
     ])
 
