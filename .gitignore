@@ -18,3 +18,5 @@ venv.bak/
 terraform.tfstate.d/
 *.tfstate
 *.tfstate.backup
+
+mcp-opennutrition/data/opennutrition-dataset-2025.1.zip

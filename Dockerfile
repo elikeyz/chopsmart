@@ -18,6 +18,11 @@ RUN npm ci
 
 COPY mcp-opennutrition/ ./
 
+RUN mkdir -p ./data \
+  && curl -L \
+  -o ./data/opennutrition-dataset-2025.1.zip \
+  https://raw.githubusercontent.com/deadletterq/mcp-opennutrition/main/data/opennutrition-dataset-2025.1.zip
+
 # Build native deps + project
 RUN npm rebuild better-sqlite3
 RUN npm run build
