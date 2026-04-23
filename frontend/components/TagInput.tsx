@@ -28,6 +28,13 @@ function TagInput({ tags, onAdd, onRemove, placeholder, variant = 'green' }: Tag
     }
   };
 
+  const handleBlur = () => {
+    if (value.trim()) {
+      onAdd(value.trim().replace(/,$/, ''));
+      setValue('');
+    }
+  };
+
   return (
     <div
       className="min-h-11 flex flex-wrap gap-1.5 items-center p-2 rounded-xl border border-border bg-white focus-within:border-primary focus-within:ring-2 focus-within:ring-(--primary)/20 transition-all cursor-text"
@@ -55,6 +62,7 @@ function TagInput({ tags, onAdd, onRemove, placeholder, variant = 'green' }: Tag
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
         placeholder={tags.length === 0 ? placeholder : ''}
         className="flex-1 min-w-30 outline-none bg-transparent text-sm text-foreground placeholder:text-(--muted)"
       />
