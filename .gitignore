@@ -1,1 +1,20 @@
+# Environments
 .env
+.envrc
+.env.backup
+.env.*
+!.env.example
+
+# Terraform variables (contain secrets)
+*.tfvars
+!*.tfvars.example
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.terraform/
+terraform.tfstate.d/
+*.tfstate
+*.tfstate.backup

@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from datetime import datetime, UTC
 
 from evaluator import run_evaluator_agent
 from planner import run_planner_agent
@@ -72,7 +73,13 @@ async def generate_recipe(request_body: RecipeRequest):
 @app.get("/health")
 async def health():
     """Health check endpoint."""
-    return {"message": "ChopSmart Backend is healthy."}
+    return {
+        "message": "ChopSmart Backend is healthy.",
+        "status": "healthy",
+        "timestamp": datetime.now(UTC).isoformat(),
+        "aws_region": os.getenv("AWS_REGION_NAME"),
+        "bedrock_model_id": os.getenv("BEDROCK_MODEL_ID")
+    }
 
 
 if __name__ == "__main__":

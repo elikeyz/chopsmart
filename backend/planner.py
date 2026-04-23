@@ -38,7 +38,7 @@ async def run_planner_agent(request_body) -> Recipe:
       """
 
       agent = Agent(
-        name="Planner",
+        name="Recipe Planner",
         model=model,
         instructions=PLANNER_INSTRUCTIONS,
         mcp_servers=[opennutrition_server],

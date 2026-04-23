@@ -26,14 +26,12 @@ DECISION STRATEGY:
 
 OUTPUT:
 Return structured JSON only:
-[
-  {
-    "name": string,
-    "ingredients": [{ "name": string, "quantity": string, "unit": string }],
-    "steps": string[],
-    "estimated_calories": number
-  }
-]
+{
+  "name": string,
+  "ingredients": [{ "name": string, "quantity": string, "unit": string }],
+  "steps": string[],
+  "estimated_calories": number
+}
 
 DO NOT include explanations outside JSON.
 """
