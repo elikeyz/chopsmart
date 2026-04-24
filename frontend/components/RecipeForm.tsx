@@ -13,6 +13,7 @@ function RecipeForm({ loading, setLoading, setRecipe }: RecipeFormProps) {
   const [calorieTarget, setCalorieTarget] = useState('');
   const [dislikes, setDislikes] = useState<string[]>([]);
   const [allergies, setAllergies] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const addTag = (list: string[], setter: (v: string[]) => void) => (tag: string) => {
     if (!list.includes(tag)) setter([...list, tag]);
@@ -24,6 +25,7 @@ function RecipeForm({ loading, setLoading, setRecipe }: RecipeFormProps) {
   const handleSubmit = async () => {
     setLoading(true);
     setRecipe(null);
+    setError(null);
 
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/generate-recipe`, {
       method: 'POST',
@@ -36,7 +38,7 @@ function RecipeForm({ loading, setLoading, setRecipe }: RecipeFormProps) {
       }),
     })
     .then(res => res.json())
-    .then(({ data, success }) => {
+    .then(({ data, success, message }) => {
       if (success) {
         setRecipe({
           name: data.final_recipe.name,
@@ -45,11 +47,13 @@ function RecipeForm({ loading, setLoading, setRecipe }: RecipeFormProps) {
           calories: data.final_recipe.estimated_calories,
           suggestions: data.evaluation.suggestions,
         });
+      } else {
+        setError(message ?? 'Something went wrong. Please try again.');
       }
       setLoading(false);
     })
-    .catch(err => {
-      console.error('Error fetching recipe:', err);
+    .catch((error) => {
+      setError(error?.message ?? 'Could not reach the server. Check your connection and try again.');
       setLoading(false);
     });
   };
@@ -130,6 +134,16 @@ function RecipeForm({ loading, setLoading, setRecipe }: RecipeFormProps) {
           variant="red"
         />
       </fieldset>
+
+      {error && (
+        <div className="flex items-start gap-2.5 rounded-xl border border-(--danger)/30 bg-(--danger-light) px-4 py-3">
+          <svg className="mt-0.5 shrink-0 text-(--danger)" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
+            <path d="M8 5v3.5M8 11h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+          <p className="text-sm text-(--danger)">{error}</p>
+        </div>
+      )}
 
       <button
         type="submit"
