@@ -45,7 +45,7 @@ async def run_planner_agent(request_body) -> Recipe:
       )
 
       with trace("ChopSmart"):
-        result = await Runner.run(agent, input=planner_prompt)
+        result = await Runner.run(agent, input=planner_prompt, max_turns=15)
         logger.info("Planner agent result: %s", result)
         return result.final_output
 

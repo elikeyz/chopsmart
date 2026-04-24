@@ -44,7 +44,7 @@ async def run_optimizer_agent(recipe, evaluation, constraints) -> OptimizerOutpu
       )
 
       with trace("ChopSmart"):
-        result = await Runner.run(agent, input=optimizer_prompt)
+        result = await Runner.run(agent, input=optimizer_prompt, max_turns=15)
         logger.info("Optimizer agent result: %s", result)
         return result.final_output
 

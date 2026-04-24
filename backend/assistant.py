@@ -27,7 +27,7 @@ async def run_assistant_agent(payload, messages) -> str:
       )
 
       with trace("ChopSmart"):
-        result = await Runner.run(agent, input=messages)
+        result = await Runner.run(agent, input=messages, max_turns=15)
         logger.info("Assistant agent result: %s", result)
         return result.final_output
 
