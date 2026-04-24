@@ -76,7 +76,7 @@ async def generate_recipe(request_body: RecipeRequest):
         evaluation = await run_evaluator_agent(recipe, request_body)
         recipe_approved = evaluation.approved
 
-        while not recipe_approved and optimization_iterations < 2:
+        while not recipe_approved and optimization_iterations < 1:
             optimized_recipe = await run_optimizer_agent(recipe, evaluation, request_body)
             recipe = optimized_recipe.recipe
             evaluation = await run_evaluator_agent(optimized_recipe, request_body)

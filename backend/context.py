@@ -19,10 +19,11 @@ RULES:
 - If constraints are not met, you MUST revise and try again
 
 DECISION STRATEGY:
-1. Try to retrieve recipes using the search-food-by-name tool
-2. If results are insufficient, construct recipes yourself
-3. Validate using nutrition search-food-by-name tool
-4. Adjust portions or ingredients if needed
+1. Check each ingredient to ensure that it is a VALID FOOD ITEM. If it is not, remove it automatically. DO NOT try to search for it or substitute it. Only include valid ingredients.
+2. Try to retrieve recipes using the search-food-by-name tool
+3. If results are insufficient, construct recipes yourself
+4. Validate using nutrition search-food-by-name tool
+5. Adjust portions or ingredients if needed
 
 OUTPUT:
 Return structured JSON only:

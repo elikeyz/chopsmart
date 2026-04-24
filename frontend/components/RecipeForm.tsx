@@ -52,8 +52,8 @@ function RecipeForm({ loading, setLoading, setRecipe }: RecipeFormProps) {
       }
       setLoading(false);
     })
-    .catch((error) => {
-      setError(error?.message ?? 'Could not reach the server. Check your connection and try again.');
+    .catch(() => {
+      setError('Could not reach the server. Check your connection and try again.');
       setLoading(false);
     });
   };
