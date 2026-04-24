@@ -85,7 +85,7 @@ function RecipeForm({ loading, setLoading, setRecipe }: RecipeFormProps) {
 
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold text-foreground">
-          Calorie target <span className="font-normal text-(--muted)">(optional)</span>
+          Calorie target <span className="font-normal text-(--muted)">(150 - 900)</span>
         </legend>
         <div className="relative">
           <input

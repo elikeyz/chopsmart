@@ -89,8 +89,8 @@ async def generate_recipe(request_body: RecipeRequest):
                 "message": "Recipe generation complete",
                 "success": True,
                 "data": {
-                    "final_recipe": recipe,
-                    "evaluation": evaluation,
+                    "final_recipe": recipe.__dict__,
+                    "evaluation": evaluation.__dict__,
                     "optimization_iterations": optimization_iterations,
                     "approved": recipe_approved
                 }
