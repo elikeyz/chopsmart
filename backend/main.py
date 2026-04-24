@@ -83,19 +83,16 @@ async def generate_recipe(request_body: RecipeRequest):
             recipe_approved = evaluation.approved
             optimization_iterations += 1
 
-        return JSONResponse(
-            status_code=200,
-            content={
-                "message": "Recipe generation complete",
-                "success": True,
-                "data": {
-                    "final_recipe": recipe.__dict__,
-                    "evaluation": evaluation.__dict__,
-                    "optimization_iterations": optimization_iterations,
-                    "approved": recipe_approved
-                }
+        return {
+            "message": "Recipe generation complete",
+            "success": True,
+            "data": {
+                "final_recipe": recipe.__dict__,
+                "evaluation": evaluation.__dict__,
+                "optimization_iterations": optimization_iterations,
+                "approved": recipe_approved
             }
-        )
+        }
     except Exception as e:
         logger.error(f"Error in recipe generation: {e}")
         return JSONResponse(
