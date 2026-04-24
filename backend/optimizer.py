@@ -31,8 +31,8 @@ async def run_optimizer_agent(recipe, evaluation, constraints) -> OptimizerOutpu
 
       USER CONSTRAINTS:
       - Target calories: {constraints.calorie_target} (acceptable ±10%)
-      - Allergies: {constraints.allergies} (STRICT)
-      - Dislikes: {constraints.dislikes}
+      - Allergies: {", ".join(constraints.allergies)} (STRICT)
+      - Dislikes: {", ".join(constraints.dislikes)}
       """
 
       agent = Agent(

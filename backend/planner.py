@@ -29,10 +29,10 @@ async def run_planner_agent(request_body) -> Recipe:
       Provide a meal recipe that meets the following user constraints. Use your capabilities to search for recipes, retrieve nutrition data, and adjust ingredients as needed to satisfy the constraints.
 
       INPUT CONSTRAINTS:
-      - Ingredients: {ingredients}
+      - Ingredients: {", ".join(ingredients)}
       - Target calories: {calorie_target} (acceptable ±10%)
-      - Dislikes: {dislikes}
-      - Allergies: {allergies} (STRICT)
+      - Dislikes: {", ".join(dislikes)}
+      - Allergies: {", ".join(allergies)} (STRICT)
       - Optional: cuisine, time, preferences
       """
 

@@ -4,12 +4,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from datetime import datetime, UTC
+import logging
 
 from evaluator import run_evaluator_agent
 from planner import run_planner_agent
 from optimizer import run_optimizer_agent
 
 load_dotenv(override=True)
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="ChopSmart Backend", version="1.0")
 
