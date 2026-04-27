@@ -1,4 +1,5 @@
 import { Recipe } from "@/types";
+import RecipeChat from "./RecipeChat";
 
 function RecipeDisplay({ recipe }: { recipe: Recipe }) {
   return (
@@ -63,6 +64,8 @@ function RecipeDisplay({ recipe }: { recipe: Recipe }) {
           </ul>
         </section>
       )}
+
+      <RecipeChat recipe={recipe} />
     </div>
   );
 }

@@ -62,6 +62,17 @@ class RecipeRequest(BaseModel):
     dislikes: list[str] = Field(default_factory=list, description="List of ingredients to avoid")
     allergies: list[str] = Field(default_factory=list, description="List of ingredients causing allergies")
 
+class ChatRequestPayload(BaseModel):
+    name: str
+    ingredients: list[dict[str, str]]
+    steps: list[str]
+    calories: int
+    suggestions: list[str]
+
+class ChatRequest(BaseModel):
+    recipe: ChatRequestPayload
+    messages: list[dict[str, str]]
+
 @app.post("/api/generate-recipe")
 async def generate_recipe(request_body: RecipeRequest):
     """
@@ -87,8 +98,8 @@ async def generate_recipe(request_body: RecipeRequest):
             "message": "Recipe generation complete",
             "success": True,
             "data": {
-                "final_recipe": recipe.__dict__,
-                "evaluation": evaluation.__dict__,
+                "final_recipe": recipe,
+                "evaluation": evaluation,
                 "optimization_iterations": optimization_iterations,
                 "approved": recipe_approved
             }
@@ -101,13 +112,13 @@ async def generate_recipe(request_body: RecipeRequest):
         )
 
 @app.post("/api/chat")
-async def chat_assistant(payload, messages):
+async def chat_assistant(request: ChatRequest):
     """
     Chat with a cooking assistant
     """
 
     try:
-        response = await run_assistant_agent(payload, messages)
+        response = await run_assistant_agent(request.recipe, request.messages)
 
         return JSONResponse(
             status_code=200,
