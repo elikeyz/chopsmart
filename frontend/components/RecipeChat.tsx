@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Recipe } from '@/types';
 
 interface Message {
@@ -80,7 +81,7 @@ function RecipeChat({ recipe }: { recipe: Recipe }) {
               }`}
             >
               <div className={`prose prose-sm max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 ${msg.role === 'assistant' ? 'text-foreground' : 'text-white'}`}>
-                <Markdown>{msg.content}</Markdown>
+                <Markdown remarkPlugins={[remarkGfm]}>{msg.content}</Markdown>
               </div>
             </div>
           </div>
