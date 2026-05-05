@@ -1,8 +1,8 @@
 import os
 import logging
 
-from agents import Agent, Runner, trace
-from agents.extensions.models.litellm_model import LitellmModel
+from agents import Agent, OpenAIChatCompletionsModel, Runner, trace
+from openai import AsyncOpenAI
 
 from context import PLANNER_INSTRUCTIONS
 from mcp_servers import create_opennutrition_mcp_server
@@ -11,11 +11,15 @@ from output_types import Recipe
 logger = logging.getLogger()
 
 async def run_planner_agent(request_body) -> Recipe:
-  model_id = os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
-  bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
-  os.environ["AWS_REGION_NAME"] = bedrock_region
+  ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1"
+  anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
 
-  model = LitellmModel(model=f"bedrock/{model_id}")
+  if not anthropic_api_key:
+    logger.error("Anthropic API key not found in environment variables.")
+    raise ValueError("Anthropic API key is required to run the planner agent.")
+
+  client = AsyncOpenAI(base_url=ANTHROPIC_BASE_URL, api_key=anthropic_api_key)
+  model = OpenAIChatCompletionsModel(model="claude-sonnet-4-6", openai_client=client)
 
   logger.info("Running planner agent with request body: %s", request_body)
   try:

@@ -11,13 +11,8 @@ from output_types import EvaluationFeedback
 logger = logging.getLogger()
 
 async def run_evaluator_agent(recipe, constraints) -> EvaluationFeedback:
-  model_id = os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
-  bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
-  os.environ["AWS_REGION_NAME"] = bedrock_region
-
-  model = LitellmModel(model=f"bedrock/{model_id}")
-
   logger.info("Running evaluator agent with recipe: %s and constraints: %s", recipe, constraints)
+
   try:
     async with create_opennutrition_mcp_server() as opennutrition_server:
       evaluator_prompt = f"""
@@ -34,7 +29,7 @@ async def run_evaluator_agent(recipe, constraints) -> EvaluationFeedback:
 
       agent = Agent(
         name="Evaluator",
-        model=model,
+        model="gpt-4.1-mini",
         instructions=EVALUATOR_INSTRUCTIONS,
         mcp_servers=[opennutrition_server],
         output_type=EvaluationFeedback
