@@ -78,6 +78,9 @@ chopsmart/
 │   ├── context.py              # System prompts for each agent
 │   ├── output_types.py         # Pydantic models (Recipe, Ingredient, etc.)
 │   ├── mcp_servers.py          # MCP server initialization (Node.js subprocess)
+│   ├── evals.py                # Deterministic evaluation metrics library
+│   ├── test_main.py            # Unit/integration tests for API endpoints
+│   ├── test_evals.py           # Evaluation test suite (metrics + workflow scenarios)
 │   ├── deploy.py               # AWS ECR + App Runner deployment script
 │   └── pyproject.toml          # Python dependencies (uv)
 ├── frontend/
@@ -171,6 +174,73 @@ All AWS resources — ECR, App Runner, IAM roles, and the GitHub Actions OIDC tr
 | Frontend errors | Add a React error boundary and integrate an error reporting service (e.g. Sentry) |
 | Alerting | Create CloudWatch alarms on App Runner 5xx error rate and p99 response latency |
 | End-to-end tracing | Instrument with AWS X-Ray or OpenTelemetry to correlate frontend → backend → Bedrock spans |
+
+## Testing
+
+### Install test dependencies
+
+```bash
+cd backend
+uv pip install pytest pytest-asyncio httpx
+```
+
+### Run all tests
+
+```bash
+cd backend
+uv run pytest test_main.py test_evals.py -v
+```
+
+### API endpoint tests — `test_main.py`
+
+Covers the two core endpoints and the health check. All agent calls (`run_planner_agent`, `run_evaluator_agent`, `run_optimizer_agent`, `run_assistant_agent`) are mocked so no Bedrock or MCP access is required.
+
+| Class | What it covers |
+| --- | --- |
+| `TestGenerateRecipeSuccess` | First-attempt approval, optimization trigger, iteration limit, response shape, optional field defaults |
+| `TestGenerateRecipeErrors` | Planner / evaluator / optimizer exceptions each return 500 |
+| `TestGenerateRecipeValidation` | `calorie_target` boundaries (150–900), missing required fields, wrong types |
+| `TestChatAssistantSuccess` | Response wrapping, argument forwarding, multi-turn history, empty message list |
+| `TestChatAssistantErrors` | Agent exception returns 500 |
+| `TestChatValidation` | Missing recipe, missing messages, malformed recipe fields |
+| `TestHealthEndpoint` | 200 with expected shape, POST returns 405 |
+
+### Evaluation system — `evals.py` + `test_evals.py`
+
+`evals.py` provides a library of deterministic, rule-based quality metrics. These are independent of LLM calls and complement the agent-based `EvaluationFeedback` produced by the Evaluator agent. They can be used to benchmark recipe quality in CI or offline analysis.
+
+#### Recipe metrics
+
+| Metric | Returns | Description |
+| --- | --- | --- |
+| `calorie_accuracy_score` | float [0–1] | 1.0 within ±10% of target; linear decay to 0.0 at ±50% |
+| `allergen_safety` | bool | False if any allergen (including plurals, e.g. "peanuts" → "peanut butter") appears in any ingredient |
+| `dislike_avoidance` | bool | False if any disliked ingredient appears |
+| `ingredient_utilization_rate` | float [0–1] | Fraction of the user's provided ingredients that the recipe uses |
+| `recipe_completeness_score` | float [0–1] | Checks non-empty name, ≥1 ingredient, ≥2 steps, positive calorie estimate |
+| `evaluation_consistency` | bool | Agent's own `EvaluationFeedback` is internally self-consistent (score range, verdict, issues vs approved) |
+| `optimization_delta` | float [−1 to 1] | Normalised score improvement from before to after an optimization cycle |
+
+#### Chat metrics
+
+| Metric | Returns | Description |
+| --- | --- | --- |
+| `chat_response_length_score` | float [0–1] | 1.0 for 10–500 words; 0.0 below 10; graceful penalty above 500 |
+| `chat_response_on_topic` | bool | True if the response contains at least one cooking or nutrition keyword |
+
+#### Aggregate helpers
+
+`evaluate_recipe(recipe, evaluation, ...)` returns a `RecipeEvalResult` dataclass. `allergen_safety` is a **hard gate** — `overall_score()` returns 0.0 whenever an allergen is detected, regardless of other metric values. `passed(threshold=0.70)` provides a single go/no-go signal.
+
+`evaluate_chat_response(response)` returns a `ChatEvalResult` with a `passed(threshold=2/3)` method.
+
+#### Evaluation test suite — `test_evals.py`
+
+| Layer | Description |
+| --- | --- |
+| Unit tests | Each metric function tested in isolation with parametrized edge cases (boundary values, plurals, case sensitivity, empty inputs) |
+| Aggregate tests | `RecipeEvalResult` and `ChatEvalResult` composition and `passed()` threshold logic |
+| Integration scenarios | Full API workflow with mocked agents; metrics applied to real response shapes |
 
 ## CI/CD
 
