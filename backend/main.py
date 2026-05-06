@@ -75,6 +75,16 @@ class ChatRequest(BaseModel):
     recipe: ChatRequestPayload
     messages: list[dict[str, str]]
 
+@app.get("/")
+async def root():
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": "Welcome to the ChopSmart Backend API. Use /api/generate-recipe to generate recipes and /api/chat to chat with the cooking assistant.",
+            "success": True,
+        }
+    )
+
 @app.post("/api/generate-recipe")
 async def generate_recipe(request_body: RecipeRequest):
     """

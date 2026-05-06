@@ -52,4 +52,4 @@ COPY --from=mcp-builder /mcp-opennutrition/ ./mcp-opennutrition/
 
 EXPOSE 8000
 
-CMD ["uv", "run", "uvicorn", "main:app"]
+CMD ["uv", "run", "main.py"]
