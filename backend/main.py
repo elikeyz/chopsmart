@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="ChopSmart Backend", version="1.0")
 
+PORT = int(os.environ.get("PORT", 8000))
+
 # Configure CORS for development and production
 cors_origins = [
     "http://localhost:3000",  # Local development
@@ -146,8 +148,6 @@ async def health():
             "message": "ChopSmart Backend is healthy.",
             "status": "healthy",
             "timestamp": datetime.now(UTC).isoformat(),
-            "aws_region": os.getenv("AWS_REGION_NAME"),
-            "bedrock_model_id": os.getenv("BEDROCK_MODEL_ID")
         }
     )
 
@@ -155,4 +155,4 @@ async def health():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
