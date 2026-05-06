@@ -49,4 +49,5 @@ jobs:
         env:
           DEFAULT_AWS_REGION: ${{ secrets.DEFAULT_AWS_REGION }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: uv run deploy.py

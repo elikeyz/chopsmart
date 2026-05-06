@@ -60,7 +60,7 @@ def main():
       "-backend-config", f"bucket=chopsmart-terraform-state-{account_id}",
       "-backend-config", f"key=dev/terraform.tfstate",
       "-backend-config", f"region={region}",
-      "-backend-config", "dynamodb_table=chopsmart-terraform-locks",
+      "-backend-config", "use_lockfile=true",
       "-backend-config", "encrypt=true",
     ])
 
@@ -198,6 +198,7 @@ def main():
                     "RuntimeEnvironmentVariables": {
                       "ENVIRONMENT": "production",
                       "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY", ""),
+                      "ANTHROPIC_API_KEY": os.environ.get("ANTHROPIC_API_KEY", ""),
                       "DEFAULT_AWS_REGION": os.environ.get("DEFAULT_AWS_REGION", ""),
                       "BEDROCK_MODEL_ID": "eu.anthropic.claude-sonnet-4-6",
                       "BEDROCK_REGION": os.environ.get("DEFAULT_AWS_REGION", ""),

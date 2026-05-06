@@ -4,7 +4,13 @@ variable "aws_region" {
 }
 
 variable "openai_api_key" {
-  description = "OpenAI API key for the researcher agent"
+  description = "OpenAI API key for the evaluator, optimizer and assistant agents"
+  type        = string
+  sensitive   = true
+}
+
+variable "anthropic_api_key" {
+  description = "Anthropic API key for the planner agent"
   type        = string
   sensitive   = true
 }

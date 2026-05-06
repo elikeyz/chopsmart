@@ -141,6 +141,7 @@ resource "aws_apprunner_service" "chopsmart-api" {
         runtime_environment_variables = {
           ENVIRONMENT        = "production"
           OPENAI_API_KEY     = var.openai_api_key
+          ANTHROPIC_API_KEY  = var.anthropic_api_key
           DEFAULT_AWS_REGION = var.aws_region
           BEDROCK_MODEL_ID   = var.bedrock_model_id
           BEDROCK_REGION     = var.bedrock_region
