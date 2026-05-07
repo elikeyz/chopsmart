@@ -31,7 +31,7 @@ cors_origins = [
 # In production, allow same-origin requests (static files served from same domain)
 if os.getenv("ENVIRONMENT") == "production":
     cors_origins.extend([
-        "https://chopsmart-murex.vercel.app/",
+        "https://chopsmart-murex.vercel.app",
     ])
 
 app.add_middleware(
