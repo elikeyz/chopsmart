@@ -30,9 +30,9 @@ cors_origins = [
 
 # In production, allow same-origin requests (static files served from same domain)
 if os.getenv("ENVIRONMENT") == "production":
-    cors_origins.append(
-        "*"
-    )  # Allow all origins in production since we serve frontend from same domain
+    cors_origins.extend([
+        "https://chopsmart-murex.vercel.app/",
+    ])
 
 app.add_middleware(
     CORSMiddleware,
@@ -74,6 +74,10 @@ class ChatRequestPayload(BaseModel):
 class ChatRequest(BaseModel):
     recipe: ChatRequestPayload
     messages: list[dict[str, str]]
+
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str):
+    return {"ok": True}
 
 @app.get("/")
 async def root():
